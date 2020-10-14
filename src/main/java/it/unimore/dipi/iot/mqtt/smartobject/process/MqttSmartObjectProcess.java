@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import it.unimore.dipi.iot.mqtt.smartobject.exception.MqttSmartObjectConfigurationException;
 import it.unimore.dipi.iot.mqtt.smartobject.device.DemoMqttSmartObject;
 import it.unimore.dipi.iot.mqtt.smartobject.resource.HumiditySensorResource;
+import it.unimore.dipi.iot.mqtt.smartobject.resource.PresenceSensorResource;
 import it.unimore.dipi.iot.mqtt.smartobject.resource.SmartObjectResource;
 import it.unimore.dipi.iot.mqtt.smartobject.resource.TemperatureSensorResource;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
@@ -68,7 +69,7 @@ public class MqttSmartObjectProcess {
             options.setConnectionTimeout(10);
             mqttClient.connect(options);
 
-            logger.info("MQTT Client Connected !");
+            logger.info("MQTT Client Connected ! Client Id: {}", deviceId);
 
             DemoMqttSmartObject demoMqttSmartObject = new DemoMqttSmartObject();
             demoMqttSmartObject.init(mqttSmartObjectConfiguration,
@@ -79,6 +80,7 @@ public class MqttSmartObjectProcess {
                         {
                             put("temperature", new TemperatureSensorResource());
                             put("humidity", new HumiditySensorResource());
+                            put("presence", new PresenceSensorResource());
                         }
                     });
 

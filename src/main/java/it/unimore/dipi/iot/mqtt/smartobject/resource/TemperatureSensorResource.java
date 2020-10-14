@@ -34,7 +34,8 @@ public class TemperatureSensorResource extends SmartObjectResource<Double> {
 
     @Override
     public Double refreshValue() {
-        return this.value + (MIN_OFFSET + new Random().nextDouble() * (MAX_OFFSET - MIN_OFFSET));
+        this.value = this.value + (MIN_OFFSET + new Random().nextDouble() * (MAX_OFFSET - MIN_OFFSET));
+        return this.value;
     }
 
 }

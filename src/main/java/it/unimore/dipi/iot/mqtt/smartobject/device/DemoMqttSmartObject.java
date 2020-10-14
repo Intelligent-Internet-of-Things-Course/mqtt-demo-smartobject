@@ -20,7 +20,7 @@ import java.util.concurrent.Semaphore;
  * Date: 24/04/2020
  * Project: MQTT BOT Smart Object (mqtt-bot-smartobject)
  */
-public class DemoMqttSmartObject implements MqttSmartObjectDevice {
+public class DemoMqttSmartObject implements IMqttSmartObjectDevice {
 
     private static final Logger logger = LoggerFactory.getLogger(DemoMqttSmartObject.class);
 
@@ -76,12 +76,13 @@ public class DemoMqttSmartObject implements MqttSmartObjectDevice {
                 //Update value for each available resource
                 //Java Streams - Useful reference link: https://www.baeldung.com/java-maps-streams
                 resourceMap.entrySet()
-                        .forEach(resourceObj -> {
+                        .forEach(mapResourceEntry -> {
                             try {
-                                if(resourceObj != null){
+                                if(mapResourceEntry != null){
                                     //Refresh Smart Object value
-                                    resourceObj.getValue().refreshValue();
-                                    publishTelemetryData(String.format("%s/%s", baseTopic, resourceObj.getKey()), new TelemetryMessage(System.currentTimeMillis(), resourceObj.getValue()));
+                                    mapResourceEntry.getValue().refreshValue();
+                                    publishTelemetryData(String.format("%s/%s", baseTopic, mapResourceEntry.getKey()),
+                                            new TelemetryMessage(System.currentTimeMillis(), mapResourceEntry.getValue()));
                                 }
                             } catch (MqttException | JsonProcessingException e) {
                                 logger.error("Error Publishing Message ! Error: {}", e.getLocalizedMessage());
@@ -100,6 +101,7 @@ public class DemoMqttSmartObject implements MqttSmartObjectDevice {
         @Override
         public void run() {
             try {
+
                 logger.info("Event Timer Task ! ....");
 
                 //Generating a Random Event Message
@@ -130,16 +132,23 @@ public class DemoMqttSmartObject implements MqttSmartObjectDevice {
 
         try {
 
-            logger.info("Waiting {} ms before starting ...", this.smartObjectConfiguration.getStartUpDelayMs()) ;
-            Thread.sleep(this.smartObjectConfiguration.getStartUpDelayMs());
+            if(this.smartObjectConfiguration != null &&
+                    this.mqttClient != null &&
+                    this.deviceId != null &&
+                    this.resourceMap != null &&
+                    this.baseTopic != null){
 
-            Timer eventTimer = new Timer();
-            eventTimer.schedule(new EventTask(), 0, this.smartObjectConfiguration.getEventUpdateTimeMs());
+                logger.info("Waiting {} ms before starting ...", this.smartObjectConfiguration.getStartUpDelayMs()) ;
+                Thread.sleep(this.smartObjectConfiguration.getStartUpDelayMs());
 
-            Timer telemetryTimer = new Timer();
-            telemetryTimer.schedule(new TelemetryTask(), 2000, this.smartObjectConfiguration.getTelemetryUpdateTimeMs());
+                Timer eventTimer = new Timer();
+                eventTimer.schedule(new EventTask(), 0, this.smartObjectConfiguration.getEventUpdateTimeMs());
 
-            semaphore.acquire(2);
+                Timer telemetryTimer = new Timer();
+                telemetryTimer.schedule(new TelemetryTask(), 2000, this.smartObjectConfiguration.getTelemetryUpdateTimeMs());
+
+                semaphore.acquire(2);
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();

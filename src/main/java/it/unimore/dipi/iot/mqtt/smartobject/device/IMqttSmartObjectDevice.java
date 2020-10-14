@@ -10,7 +10,7 @@ import java.util.Map;
  * Date: 24/04/2020
  * Project: MQTT BOT Smart Object (mqtt-bot-smartobject)
  */
-public interface MqttSmartObjectDevice {
+public interface IMqttSmartObjectDevice {
 
     public void init(MqttSmartObjectConfiguration smartObjectConfiguration,
                      IMqttClient mqttClient,

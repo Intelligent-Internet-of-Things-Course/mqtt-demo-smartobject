@@ -14,9 +14,9 @@ public class HumiditySensorResource extends SmartObjectResource<Double> {
 
     private double value;
 
-    private final double MAX_TEMPERATURE_VALUE = 50.0;
+    private final double MAX_HUMIDITY_VALUE = 50.0;
 
-    private final double MIN_TEMPERATURE_VALUE = 30.0;
+    private final double MIN_HUMIDITY_VALUE = 30.0;
 
     private final double MAX_OFFSET = +3.0;
 
@@ -29,12 +29,13 @@ public class HumiditySensorResource extends SmartObjectResource<Double> {
     public HumiditySensorResource(){
         super(UUID.randomUUID().toString(), HumiditySensorResource.RESOURCE_UNIT, HumiditySensorResource.RESOURCE_TYPE);
         this.random = new Random(System.currentTimeMillis());
-        this.value = MIN_TEMPERATURE_VALUE + this.random.nextDouble() * (MAX_TEMPERATURE_VALUE - MIN_TEMPERATURE_VALUE);
+        this.value = MIN_HUMIDITY_VALUE + this.random.nextDouble() * (MAX_HUMIDITY_VALUE - MIN_HUMIDITY_VALUE);
     }
 
     @Override
     public Double refreshValue() {
-        return this.value + (MIN_OFFSET + new Random().nextDouble() * (MAX_OFFSET - MIN_OFFSET));
+        this.value = this.value + (MIN_OFFSET + new Random().nextDouble() * (MAX_OFFSET - MIN_OFFSET));
+        return this.value;
     }
 
 }

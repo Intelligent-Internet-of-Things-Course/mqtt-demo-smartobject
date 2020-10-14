@@ -10,7 +10,9 @@ import java.util.Map;
 public class EventMessage {
 
     private String type;
+
     private long timestamp;
+
     private Map<String, Object> metadata;
 
     public EventMessage() {
