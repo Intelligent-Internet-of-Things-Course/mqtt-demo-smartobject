@@ -13,6 +13,8 @@ public abstract class SmartObjectResource<T> {
 
     private String type;
 
+    protected T value;
+
     public SmartObjectResource() {
     }
 
@@ -46,7 +48,19 @@ public abstract class SmartObjectResource<T> {
         this.type = type;
     }
 
-    public abstract T refreshValue();
+    public T getValue(){
+        return this.value;
+    }
+
+    /**
+     * Method used to refresh emulated resource internal value
+     * Use this.value to update the internal field (type T)
+     */
+    public abstract void refreshValue();
+
+    public void setValue(T value) {
+        this.value = value;
+    }
 
     @Override
     public String toString() {
@@ -54,6 +68,7 @@ public abstract class SmartObjectResource<T> {
         sb.append("id='").append(id).append('\'');
         sb.append(", unit='").append(unit).append('\'');
         sb.append(", type='").append(type).append('\'');
+        sb.append(", value=").append(value);
         sb.append('}');
         return sb.toString();
     }

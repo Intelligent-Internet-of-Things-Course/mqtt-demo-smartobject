@@ -34,7 +34,7 @@ public class DemoMqttSmartObject implements IMqttSmartObjectDevice {
 
     private String deviceId;
 
-    private Map<String, SmartObjectResource> resourceMap;
+    private Map<String, SmartObjectResource<?>> resourceMap;
 
     private static final String HEARTBEAT_EVENT_TYPE = "HEARTBEAT_EVENT";
 
@@ -52,7 +52,7 @@ public class DemoMqttSmartObject implements IMqttSmartObjectDevice {
                      IMqttClient mqttClient,
                      String deviceId,
                      String baseTopic,
-                     Map<String, SmartObjectResource> resourceMap) {
+                     Map<String, SmartObjectResource<?>> resourceMap) {
 
         this.smartObjectConfiguration = smartObjectConfiguration;
         this.mqttClient = mqttClient;
@@ -79,10 +79,12 @@ public class DemoMqttSmartObject implements IMqttSmartObjectDevice {
                         .forEach(mapResourceEntry -> {
                             try {
                                 if(mapResourceEntry != null){
+
                                     //Refresh Smart Object value
                                     mapResourceEntry.getValue().refreshValue();
+
                                     publishTelemetryData(String.format("%s/%s", baseTopic, mapResourceEntry.getKey()),
-                                            new TelemetryMessage(System.currentTimeMillis(), mapResourceEntry.getValue()));
+                                            new TelemetryMessage(System.currentTimeMillis(), mapResourceEntry.getValue().getType(), mapResourceEntry.getValue()));
                                 }
                             } catch (MqttException | JsonProcessingException e) {
                                 logger.error("Error Publishing Message ! Error: {}", e.getLocalizedMessage());

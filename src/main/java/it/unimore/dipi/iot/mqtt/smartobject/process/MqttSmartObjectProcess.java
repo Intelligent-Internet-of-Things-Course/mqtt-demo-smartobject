@@ -76,7 +76,7 @@ public class MqttSmartObjectProcess {
                     mqttClient,
                     deviceId,
                     String.format("iot/device/%s", deviceId),
-                    new HashMap<String, SmartObjectResource>(){
+                    new HashMap<String, SmartObjectResource<?>>(){
                         {
                             put("temperature", new TemperatureSensorResource());
                             put("humidity", new HumiditySensorResource());

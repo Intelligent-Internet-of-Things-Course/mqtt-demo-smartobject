@@ -16,7 +16,7 @@ public interface IMqttSmartObjectDevice {
                      IMqttClient mqttClient,
                      String deviceId,
                      String baseTopic,
-                     Map<String, SmartObjectResource> resourceMap);
+                     Map<String, SmartObjectResource<?>> resourceMap);
 
     public void start();
 

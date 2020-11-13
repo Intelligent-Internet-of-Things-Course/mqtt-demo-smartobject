@@ -1,7 +1,6 @@
 package it.unimore.dipi.iot.mqtt.smartobject.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.unimore.dipi.iot.mqtt.smartobject.resource.SmartObjectResource;
 
 /**
  * @author Marco Picone, Ph.D. - picone.m@gmail.com
@@ -13,15 +12,25 @@ public class TelemetryMessage {
     @JsonProperty("timestamp")
     private long timestamp;
 
+    @JsonProperty("type")
+    private String type;
+
     @JsonProperty("data")
-    private SmartObjectResource smartObjectResourceList;
+    private Object dataValue;
 
     public TelemetryMessage() {
     }
 
-    public TelemetryMessage(long timestamp, SmartObjectResource smartObjectResourceList) {
+    public TelemetryMessage(String type, Object dataValue) {
+        this.timestamp = System.currentTimeMillis();
+        this.type = type;
+        this.dataValue = dataValue;
+    }
+
+    public TelemetryMessage(long timestamp, String type, Object dataValue) {
         this.timestamp = timestamp;
-        this.smartObjectResourceList = smartObjectResourceList;
+        this.type = type;
+        this.dataValue = dataValue;
     }
 
     public long getTimestamp() {
@@ -32,19 +41,28 @@ public class TelemetryMessage {
         this.timestamp = timestamp;
     }
 
-    public SmartObjectResource getSmartObjectResourceList() {
-        return smartObjectResourceList;
+    public String getType() {
+        return type;
     }
 
-    public void setSmartObjectResourceList(SmartObjectResource smartObjectResourceList) {
-        this.smartObjectResourceList = smartObjectResourceList;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Object getDataValue() {
+        return dataValue;
+    }
+
+    public void setDataValue(Object dataValue) {
+        this.dataValue = dataValue;
     }
 
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("TelemetryMessage{");
         sb.append("timestamp=").append(timestamp);
-        sb.append(", smartObjectResourceList=").append(smartObjectResourceList);
+        sb.append(", type='").append(type).append('\'');
+        sb.append(", dataValue=").append(dataValue);
         sb.append('}');
         return sb.toString();
     }

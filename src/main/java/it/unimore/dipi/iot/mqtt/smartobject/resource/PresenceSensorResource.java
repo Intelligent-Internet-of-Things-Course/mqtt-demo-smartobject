@@ -1,5 +1,9 @@
 package it.unimore.dipi.iot.mqtt.smartobject.resource;
 
+import it.unimore.dipi.iot.mqtt.smartobject.device.DemoMqttSmartObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -9,6 +13,8 @@ import java.util.UUID;
  * @created 14/10/2020 - 14:29
  */
 public class PresenceSensorResource extends SmartObjectResource<Boolean>{
+
+    private static final Logger logger = LoggerFactory.getLogger(PresenceSensorResource.class);
 
     private static String UNIT_VALUE = "Boolean";
 
@@ -22,11 +28,12 @@ public class PresenceSensorResource extends SmartObjectResource<Boolean>{
                 TYPE_VALUE);
 
         this.random = new Random(System.currentTimeMillis());
+        this.value = this.random.nextBoolean();
     }
 
     @Override
-    public Boolean refreshValue() {
-        return this.random.nextBoolean();
+    public void refreshValue() {
+        this.value = this.random.nextBoolean();
     }
 
 }
